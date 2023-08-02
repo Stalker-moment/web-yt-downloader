@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube Downloader</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-image: url('https://pictures.betaseries.com/banners/episodes/33695/eeb92f1b571e843a1d5363ab2293f808.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+
+    h1 {
+      text-align: center;
+      color: white;
+    }
+
+    form {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    label {
+      margin-right: 10px;
+    }
+
+    button {
+      margin-left: 10px;
+    }
+
+    #video-info,
+    #formats {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    img {
+      width: 320px;
+      height: 180px;
+      margin-bottom: 10px;
+    }
+
+    select {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>YouTube Downloader</h1>
+  <form action="/download" method="GET">
+    <label for="url">YouTube URL:</label>
+    <input type="text" id="url" name="url" placeholder="Enter YouTube URL" required>
+    <button type="submit">Get Info</button>
+  </form>
+
+  <% if (typeof title !== 'undefined' && typeof thumbnails !== 'undefined' && typeof formats !== 'undefined' && typeof youtubeUrl !== 'undefined') { %>
+    <div id="video-info">
+      <h2>Video Info:</h2>
+      <% if (thumbnails && thumbnails.length > 0) { %>
+        <img id="thumbnail" src="<%= thumbnails[0].url %>" alt="Thumbnail">
+      <% } %>
+      <p><%= title %></p>
+    </div>
+
+    <div id="formats">
+      <h2>Download Options:</h2>
+      <form action="/video" method="GET">
+        <label for="video-format">Video Format:</label>
+        <select id="video-format" name="format">
+          <% formats.forEach(function(format) { %>
+            <% if (format.hasVideo) { %>
+              <option value="<%= format.itag %>"><%= format.qualityLabel %> (<%= format.container %>)</option>
+            <% } %>
+          <% }); %>
+        </select>
+        <input type="hidden" name="url" value="<%= youtubeUrl %>">
+        <button type="submit">Download Video</button>
+      </form>
+
+      <form action="/audio" method="GET">
+        <label for="audio-format">Audio Format:</label>
+        <select id="audio-format" name="format">
+          <% formats.forEach(function(format) { %>
+            <% if (format.hasAudio) { %>
+              <option value="<%= format.itag %>"><%= format.audioBitrate %> kbps (<%= format.container %>)</option>
+            <% } %>
+          <% }); %>
+        </select>
+        <input type="hidden" name="url" value="<%= youtubeUrl %>">
+        <button type="submit">Download Audio</button>
+      </form>
+    </div>
+  <% } %>
+</body>
+</html>
