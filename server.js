@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
 app.get('/download', async (req, res) => {
   const youtubeUrl = req.query.url;
   if (!youtubeUrl) {
-    res.status(400).send('Please provide a valid YouTube URL.');
+    res.render('404_production')
     return;
   }
 
@@ -30,7 +30,7 @@ app.get('/download', async (req, res) => {
     res.render('index', { title, thumbnails, formats, youtubeUrl });
   } catch (err) {
     console.error('Error fetching video info:', err.message);
-    res.status(400).send('Invalid YouTube URL or error fetching video info.');
+    res.render('404_production')
   }
 });
 
@@ -49,14 +49,14 @@ app.get('/video', async (req, res) => {
     ytdl(url, { format: videoFormat }).pipe(res);
   } catch (err) {
     console.error('Error downloading video:', err.message);
-    res.status(500).send('Error downloading video.');
+    res.render('404_production')
   }
 });
 
 app.get('/audio', async (req, res) => {
   const { url } = req.query;
   if (!url) {
-    res.status(400).send('Please provide a valid YouTube URL.');
+    res.render('404_production')
     return;
   }
 
@@ -91,7 +91,31 @@ app.get('/audio', async (req, res) => {
       });
   } catch (err) {
     console.error('Error fetching video info:', err.message);
-    res.status(500).send('Error fetching video info.');
+    res.render('404_production')
+  }
+});
+
+app.get('/file/:name', async (req, res) => {
+  const { name } = req.params;
+  const filePath = path.join(__dirname, 'file', name);
+  
+  if (!fs.existsSync(filePath)) {
+    res.status(404).send('File not found');
+    return;
+  }
+
+  //render image
+  res.sendFile(filePath);
+});
+
+app.use((req, res, next) => {
+  if (req.method === 'GET') {
+    res.status(404).render('404_production');
+  } else {
+    res.status(404).json({
+      code: 404,
+      message: "Not Found"
+    });
   }
 });
 

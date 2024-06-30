@@ -16,6 +16,16 @@
       align-items: center;
       justify-content: center;
     }
+    .footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #2d3748;
+      color: #cbd5e0;
+      text-align: center;
+      padding: 0.5rem;
+    }
   </style>
 </head>
 <body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col items-center justify-center">
@@ -26,7 +36,7 @@
     <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Get Info</button>
   </form>
 
-  <% if (typeof title !== 'undefined' && typeof thumbnails !== 'undefined' && typeof formats !== 'undefined' && typeof youtubeUrl !== 'undefined') { %>
+  <% if (title && thumbnails && formats && youtubeUrl) { %>
     <div id="video-info" class="text-center mb-8">
       <h2 class="text-2xl mb-4">Video Info:</h2>
       <% if (thumbnails && thumbnails.length > 0) { %>
@@ -64,5 +74,9 @@
       </form>
     </div>
   <% } %>
+
+  <div class="footer">
+    Made by <a href="https://tierkun.site" class="underline">tierkun</a>
+  </div>
 </body>
 </html>
