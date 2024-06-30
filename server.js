@@ -101,7 +101,7 @@ app.get('/audio', async (req, res) => {
     const title = info.videoDetails.title.replace(/[^\w\s]/gi, ''); // Remove special characters from the title
     res.header('Content-Disposition', `attachment; filename="${title}.mp3"`);
 
-    const audioStream = audioFormat.url ? ytdl.downloadFromInfo(info, { format: audioFormat }) : ytdl(url, { format: audioFormat });
+    const audioStream = ytdl(url, { format: audioFormat });
     const outputPath = path.join(__dirname, `${uuidv4()}.mp3`);
 
     // Use fluent-ffmpeg to handle audio processing
