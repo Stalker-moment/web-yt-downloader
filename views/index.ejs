@@ -4,77 +4,42 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>YouTube Downloader</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      background-image: url('https://pictures.betaseries.com/banners/episodes/33695/eeb92f1b571e843a1d5363ab2293f808.jpg');
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
+      background-color: #1a202c; /* Dark mode background */
+      color: #cbd5e0; /* Light text for dark mode */
     }
-
-    h1 {
-      text-align: center;
-      color: white;
-    }
-
-    form {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-
-    label {
-      margin-right: 10px;
-    }
-
-    button {
-      margin-left: 10px;
-    }
-
-    #video-info,
-    #formats {
+    .form-container {
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-top: 20px;
-    }
-
-    img {
-      width: 320px;
-      height: 180px;
-      margin-bottom: 10px;
-    }
-
-    select {
-      margin-bottom: 10px;
+      justify-content: center;
     }
   </style>
 </head>
-<body>
-  <h1>YouTube Downloader</h1>
-  <form action="/download" method="GET">
-    <label for="url">YouTube URL:</label>
-    <input type="text" id="url" name="url" placeholder="Enter YouTube URL" required>
-    <button type="submit">Get Info</button>
+<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col items-center justify-center">
+  <h1 class="text-4xl mb-8">YouTube Downloader</h1>
+  <form action="/download" method="GET" class="form-container mb-8">
+    <label for="url" class="mr-2 mb-2">YouTube URL:</label>
+    <input type="text" id="url" name="url" placeholder="Enter YouTube URL" required class="p-2 rounded mb-4 text-gray-900">
+    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Get Info</button>
   </form>
 
   <% if (typeof title !== 'undefined' && typeof thumbnails !== 'undefined' && typeof formats !== 'undefined' && typeof youtubeUrl !== 'undefined') { %>
-    <div id="video-info">
-      <h2>Video Info:</h2>
+    <div id="video-info" class="text-center mb-8">
+      <h2 class="text-2xl mb-4">Video Info:</h2>
       <% if (thumbnails && thumbnails.length > 0) { %>
-        <img id="thumbnail" src="<%= thumbnails[0].url %>" alt="Thumbnail">
+        <img id="thumbnail" src="<%= thumbnails[0].url %>" alt="Thumbnail" class="w-80 h-45 mb-4">
       <% } %>
-      <p><%= title %></p>
+      <p class="text-lg"><%= title %></p>
     </div>
 
-    <div id="formats">
-      <h2>Download Options:</h2>
-      <form action="/video" method="GET">
-        <label for="video-format">Video Format:</label>
-        <select id="video-format" name="format">
+    <div id="formats" class="text-center">
+      <h2 class="text-2xl mb-4">Download Options:</h2>
+      <form action="/video" method="GET" class="mb-4">
+        <label for="video-format" class="block mb-2">Video Format:</label>
+        <select id="video-format" name="format" class="p-2 rounded mb-4 text-gray-900">
           <% formats.forEach(function(format) { %>
             <% if (format.hasVideo) { %>
               <option value="<%= format.itag %>"><%= format.qualityLabel %> (<%= format.container %>)</option>
@@ -82,12 +47,12 @@
           <% }); %>
         </select>
         <input type="hidden" name="url" value="<%= youtubeUrl %>">
-        <button type="submit">Download Video</button>
+        <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Download Video</button>
       </form>
 
       <form action="/audio" method="GET">
-        <label for="audio-format">Audio Format:</label>
-        <select id="audio-format" name="format">
+        <label for="audio-format" class="block mb-2">Audio Format:</label>
+        <select id="audio-format" name="format" class="p-2 rounded mb-4 text-gray-900">
           <% formats.forEach(function(format) { %>
             <% if (format.hasAudio) { %>
               <option value="<%= format.itag %>"><%= format.audioBitrate %> kbps (<%= format.container %>)</option>
@@ -95,7 +60,7 @@
           <% }); %>
         </select>
         <input type="hidden" name="url" value="<%= youtubeUrl %>">
-        <button type="submit">Download Audio</button>
+        <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Download Audio</button>
       </form>
     </div>
   <% } %>
