@@ -134,6 +134,17 @@ app.get('/audio', async (req, res) => {
   }
 });
 
+app.use((req, res, next) => {
+  if (req.method === 'GET') {
+    res.status(404).render('404_production');
+  } else {
+    res.status(404).json({
+      code: 404,
+      message: "Not Found"
+    });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
